@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>element-info</title>
+        
+        <style>
+            body, section, div, h1 {
+                margin: 0;
+                padding: 0;
+                border: 0;
+            }
+            
+            #info-widget {
+                position: absolute;
+                top: 100px;
+                left: 300px;
+                padding: 1em;
+                background: grey;
+                border: 1px solid black;
+                z-index: 100000;
+            }
+            
+            #content {
+                background: green;
+            }
+            
+            h1 {
+                background: black;
+                color: white;
+            }
+            
+            div.offset {
+                height: 100em;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="info-widget"></div>
+        
+        <div id="content">
+            <div id="a" class="offset">
+                <h1>A</h1>
+            </div>
+                
+            <div id="b" class="offset">
+                <h1>C</h1>
+            </div>
+            
+            <div id="c" class="offset">
+                <h1>C</h1>
+            </div>
+        </div>
+        
+        <script>
+            var dojoConfig = {
+                async: true,
+                cacheBust: 1,
+                packages: [
+                    { name: 'element-info', location: '../../../../element-info' }
+                ]
+            };
+        </script>
+
+        <script src="../../vendor/dojo/dev-master/dojo/dojo.js"></script>
+        
+        <script>
+            require([
+                "element-info/InfoWidget",
+                "dojo/_base/window",
+                "dojo/query",
+                "dojo/dom"
+            ], function (
+                InfoWidget,
+                baseWin,
+                query,
+                dom
+            ) {
+                var widget = new InfoWidget({
+                    id: 'info-widget',
+                    scrollNode: baseWin.doc,
+                    contentNode: dom.byId('content'),
+                    offsetNodes: query('h1', dom.byId('content'))
+                }, 'info-widget');
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>scroll-top-spy (element-scroll)</title>
+        
+        <style>
+            body, section, div, h1 {
+                margin: 0;
+                padding: 0;
+                border: 0;
+            }
+            
+            #info {
+                position: absolute;
+                top: 100px;
+                left: 300px;
+                padding: 1em;
+                background: grey;
+                border: 1px solid black;
+                z-index: 100000;
+            }
+            
+            
+            
+            #content {
+                background: green;
+                position: relative;
+                height: 300px;
+                overflow: auto;
+            }
+            
+            h1 {
+                background: black;
+                color: white;
+            }
+            
+            div.offset {
+                height: 100em;
+            }
+        </style>
+    </head>
+
+    <body>
+        
+        <div id="info">
+            <ul>
+                <li id="scroll-width">element.scrollWidth / element.scrollHeight = <span></span></li>
+                <li id="position-width">geometry.position().w / geometry.position().h = <span></span></li>
+                <li id="position-rel-to-viewport">geometry.position().x / geometry.position().y = <span></span> (position of #content relative to viewport)</li>
+                <li id="position-rel-to-document">geometry.position().x / geometry.position().y = <span></span> (position of #content relative to document)</li>
+            </ul>
+            
+            <ul>
+                <li id="win-width">win.getBox().w x win.getBox().h = <span></span></li>
+                <li id="window-inner-width">window.innerWidth x window.innerHeight = <span></span> (includes scrollbars)</li>
+            </ul>
+            
+            <ul>
+                <li id="page-offset">window.pageXOffset / window.pageYOffset = <span></span></li>
+                <li id="doc-scroll">geometry.docScroll().x / geometry.docScroll().y = <span></span></li>
+            </ul>
+            
+            <ul>
+                <li id="screen-width">screen.width x screen.height = <span></span> (irrelevant)</li>
+            </ul>
+        </div>
+        
+        <div id="content">
+            <div id="a" class="offset">
+                <h1>A</h1>
+            </div>
+                
+            <div id="b" class="offset">
+                <h1>C</h1>
+            </div>
+            
+            <div id="c" class="offset">
+                <h1>C</h1>
+            </div>
+        </div>
+        
+        <script>
+            var dojoConfig = {
+                async: true,
+                cacheBust: 1,
+                packages: [
+                    { name: 'scroll-top-spy', location: '../../../../scroll-top-spy' }
+                ]
+            };
+        </script>
+
+        <script src="../../vendor/dojo/dev-master/dojo/dojo.js"></script>
+        
+        <script>
+            require([
+                "scroll-top-spy/ScrollTopSpy",
+                "dojo/dom-geometry",
+                "dojo/dom-style",
+                "dojo/_base/lang",
+                "dojo/_base/declare",
+                "dojo/_base/window",
+                "dojo/Evented",
+                "dojo/window",
+                "dojo/query",
+                "dojo/dom",
+                "dojo/on"
+            ], function (
+                ScrollTopSpy,
+                geometry,
+                domStyle,
+                lang,
+                declare,
+                baseWin,
+                Evented,
+                win,
+                query,
+                dom,
+                on
+            ) {
+                var ss = new ScrollTopSpy(dom.byId('content'), query('div.offset'), 70, 200);
+                //ss.destroy();
+                
+                ss.on('active', function (ev) {
+                    console.log(ev.node)
+                });
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                var infoNode = dom.byId('info'),
+                    contentNode = dom.byId('content'),
+                    nodes = query('div.offset');
+                    
+                var analyze = function () {
+                    domStyle.set(infoNode, 'top', geometry.docScroll().y + 100 + 'px');
+                    
+                    query('#scroll-width > span', infoNode)[0].innerHTML = dom.byId('content').scrollWidth + ' / ' + dom.byId('content').scrollHeight;
+                    query('#position-width > span', infoNode)[0].innerHTML = geometry.position(dom.byId('content')).w + ' / ' + geometry.position(dom.byId('content')).h;
+                    query('#position-rel-to-viewport > span', infoNode)[0].innerHTML = geometry.position(dom.byId('content'), false).x + ' / ' + geometry.position(dom.byId('content'), false).y; // position relative to the viewport
+                    query('#position-rel-to-document > span', infoNode)[0].innerHTML = geometry.position(dom.byId('content'), true).x + ' / ' + geometry.position(dom.byId('content'), true).y; // position relative to the document
+                    
+                    query('#win-width > span', infoNode)[0].innerHTML = win.getBox().w + ' x ' + win.getBox().h;
+                    query('#window-inner-width > span', infoNode)[0].innerHTML = window.innerWidth + ' x ' + window.innerHeight;
+                    query('#screen-width > span', infoNode)[0].innerHTML = screen.width + ' x ' + screen.height;
+                    
+                    query('#page-offset > span', infoNode)[0].innerHTML = window.pageXOffset + ' / ' + window.pageYOffset;
+                    query('#doc-scroll > span', infoNode)[0].innerHTML = geometry.docScroll().x + ' / ' + geometry.docScroll().y;
+                    
+                    query('div', contentNode).forEach(function (sectionNode) {
+                        var i  = 'top2doc: ' + geometry.position(sectionNode, true).y;
+                            i += ', top2viewport: ' + geometry.position(sectionNode, false).y;
+                        query('h1', sectionNode)[0].innerHTML = i;
+                    });
+                }
+                
+                analyze();
+                
+                on(dom.byId('content'), 'scroll', function (ev) {
+                    analyze();
+                });
+                
+            });
+        </script>
+    </body>
+</html>

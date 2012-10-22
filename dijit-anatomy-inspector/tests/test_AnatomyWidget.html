@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>AnatomyWidget</title>
+    </head>
+    <body>
+        <div>
+            <h1>AnatomyWidget</h1>
+            <div id="widget"></div>
+        </div>
+        
+        <script>
+            var dojoConfig = {
+                async: true,
+                cacheBust: 1,
+                packages: [
+                    { name: 'dijit-anatomy-inspector', location: '../../../../dijit-anatomy-inspector' }
+                ]
+            };
+        </script>
+
+        <script src="../../vendor/dojo/dev-master/dojo/dojo.js"></script>
+
+        <script>
+            require([
+                "dojo/dom",
+                "dijit-anatomy-inspector/AnatomyWidget",
+                "dojo/domReady!"
+            ], function (
+                dom,
+                AnatomyWidget
+            ) {
+                var widget = new AnatomyWidget({
+                    title: 'Title as a constructor arg'
+                }, 'widget');
+                
+                widget.startup();
+                widget.logProperties();
+
+                setTimeout(function () {
+                    widget.set('title', 'Title set manually');
+                }, 5000);
+
+                setTimeout(function () {
+                    widget.destroyRecursive();
+                }, 10000);
+            });
+        </script>
+    </body>
+</html>
