@@ -19,19 +19,27 @@ define([
         // and that were either specified as constructor parameters
         // or have non-null non-blank non-zero default values
         title: 'Initial value set in the widget',
+        xxx: 'Another class property with custom setter',
         
         // custom setter, invoked on myWidget.set("title", "value")
         _setTitleAttr: function (value) {
-            console.info('set("title", "' + value + '")');
+            console.info('_setTitleAttr("' + value + '")');
             this.titleNode.innerHTML = value;
             // always use _set to update internal values to interface properly
             // with the watch functionality from dojo/Stateful
             this._set("title", value);
         },
+        
+        _setXxxAttr: function (value) {
+            console.info('_setXxxAttr("' + value + '")');
+            // always use _set to update internal values to interface properly
+            // with the watch functionality from dojo/Stateful
+            this._set("xxx", value);
+        },
 
         // custom getter, invoked on myWidget.get("title")
         _getTitleAttr: function () {
-            console.log('get("title")');
+            console.log('_getTitleAttr()');
         },
         
         // event handler defined in template by data-dojo-attach-event="onclick:_onTitleClick"
@@ -142,6 +150,8 @@ define([
             console.log('style: ', this.style);
             // most commonly, the HTML title attribute for native tooltips
             console.log('title: ', this.title);
+            // some other property
+            console.log('xxx: ', this.xxx);
             // the root CSS class of the widget
             console.log('baseClass: ', this.baseClass);
             console.log('*** PROPERTIES ***');
