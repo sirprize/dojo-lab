@@ -48,17 +48,18 @@ define([
         },
 
         preamble: function () {
-            console.log('preamble() called by dojo/declare');
+            console.log('preamble() called by dojo/_base/declare');
             this.inherited(arguments);
         },
 
         constructor: function (params, srcNodeRef) {
-            console.log('constructor() called by dojo/declare');
-            this.inherited(arguments);
+            console.log('constructor() called by dojo/_base/declare');
+            // by default, parent constructors are always called,
+            // but this behaviour can be modified by means of the "-chains-" property
         },
-
+        
         postscript: function (params, srcNodeRef) {
-            console.log('postscript() called by dojo/declare');
+            console.log('postscript() called by dojo/_base/declare');
             this.inherited(arguments);
         },
 
@@ -71,6 +72,7 @@ define([
         // Change the instance’s properties here before the widget is rendered
         postMixInProperties: function () {
             console.log('postMixInProperties() called by this.create()');
+            console.info('this.yyy is now available', this.yyy);
             this.inherited(arguments);
         },
         
