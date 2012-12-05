@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>event-delegation</title>
+    </head>
+
+    <body>
+        <div id="parent">
+            <div class="box-one">
+                <button class="some-button">some</button>
+            </div>
+            
+            <div class="box-two">
+                <button class="some-button">some</button>
+            </div>
+        </div>
+        
+        <script>
+            var dojoConfig = {
+                async: true,
+                cacheBust: 1
+            };
+        </script>
+
+        <script src="../vendor/dojo/dev-master/dojo/dojo.js"></script>
+        
+        <script>
+            require([
+                "dojo/dom",
+                "dojo/query", // indirectly used for event delegation
+                "dojo/on"
+            ], function (
+                dom,
+                query,
+                on
+            ) {
+                on(dom.byId('parent'), '.box-one .some-button:click', function (ev) {
+                    alert('box-one some-button');
+                });
+            });
+        </script>
+    </body>
+</html>
